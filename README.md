@@ -16,6 +16,7 @@
   <a href="https://github.com/Sannho/trashday/releases/latest"><img src="https://img.shields.io/github/v/release/Sannho/trashday?label=download&color=2f6be0" alt="Download"></a>
   <a href="https://github.com/Sannho/trashday/actions/workflows/build.yml"><img src="https://github.com/Sannho/trashday/actions/workflows/build.yml/badge.svg" alt="Build"></a>
   <img src="https://img.shields.io/badge/Windows%20only-10%20%7C%2011-0078D4?logo=windows&logoColor=white" alt="Windows only: 10 | 11">
+  <a href="LICENSE"><img src="https://img.shields.io/badge/license-GPL--3.0-2f6be0" alt="License: GPL-3.0"></a>
   <img src="https://img.shields.io/badge/Go-1.26-00ADD8?logo=go&logoColor=white" alt="Go 1.26">
   <img src="https://img.shields.io/badge/exe-~3%20MB-2f6be0" alt="~3 MB exe">
 </p>
@@ -60,6 +61,8 @@
 
 Grab `trashday.exe` from the [latest release](https://github.com/Sannho/trashday/releases/latest). No installer: just run it.
 
+> **Only the releases of this repository are official.** TrashDay has no website and no other download source.
+
 - **Windows 10 or 11 only.** Windows 10 may need the [WebView2 runtime](https://developer.microsoft.com/microsoft-edge/webview2/); Windows 11 already has it.
 - The exe is not code-signed, so Windows SmartScreen may warn the first time: click **More info → Run anyway**.
 - To check the download, compare its hash with `trashday.exe.sha256` from the release: `Get-FileHash trashday.exe`
@@ -100,5 +103,9 @@ The script:
 ## Contributing
 
 Ideas, new safe targets and fixes are welcome: see [CONTRIBUTING.md](CONTRIBUTING.md). AI coding agents: read [AGENTS.md](AGENTS.md) first.
+
+## License
+
+[GPL-3.0](LICENSE). You may use, study, modify and share TrashDay freely. If you distribute a modified version, you must publish its source under the same license. This keeps every TrashDay build open, so no hidden ads or malware can be slipped into one. The software comes with no warranty.
 
 TrashDay is a modern take on the old freeware **ATF Cleaner**.

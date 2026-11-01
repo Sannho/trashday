@@ -41,6 +41,10 @@ go test ./...    # tests only (run build.ps1 once first: it generates ui.css)
 - Run `gofmt`, then make sure `.\build.ps1` passes. GitHub Actions runs the same build on every PR.
 - UI changes: edit [`index.html`](index.html) with Tailwind classes only. Add every new text in both languages, and include a screenshot.
 
+## License
+
+By contributing, you agree that your contribution is licensed under the [GPL-3.0](LICENSE), like the rest of the project.
+
 ## Releases
 
 Maintainers push a tag such as `v1.2.0`. The [Build workflow](.github/workflows/build.yml) then publishes `trashday.exe` and its SHA-256 to a GitHub release.
