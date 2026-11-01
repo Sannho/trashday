@@ -4,6 +4,9 @@ All notable changes are listed here. Versions follow [Semantic Versioning](https
 
 ## [Unreleased]
 
+### Added
+- **Recycle Bin** item: empties the bin of every drive. Unchecked by default and never part of Quick clean.
+
 ### Changed
 - Project layout: `cmd/trashday`, `internal/cleaner`, `ui/`, `build/windows`, `tools/icongen`.
 - UI split into `ui/index.html`, `ui/app.js` and `ui/style.css`, with texts in `ui/i18n/<lang>.json`. Add a language by adding a file.

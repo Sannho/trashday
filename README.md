@@ -47,7 +47,7 @@
   - **Quick clean** runs a fixed, safe set: temp folders, error reports, crash dumps, temporary Internet files.
 - **Safe by design**:
   - Only caches, temp files and logs that apps rebuild on their own.
-  - No browser history or cookies, no Recycle Bin, no registry "cleaning".
+  - No browser history or cookies, no registry "cleaning". The Recycle Bin is emptied only if you check it.
   - Symlinks and junctions are never followed nor removed, so a cache you moved to another drive stays as you set it up.
   - Paths come from environment variables that are checked first: a bad `%TEMP%` or an empty variable can never widen what gets deleted.
   - Outlook's opened attachments (`Content.Outlook`) are always kept.

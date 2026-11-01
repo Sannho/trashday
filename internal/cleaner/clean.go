@@ -29,6 +29,9 @@ var keepNames = map[string]bool{"content.outlook": true}
 // Overlapping matches (the same folder twice, or one inside another) are handled once,
 // so Analyze never counts a file twice.
 func Clean(t Target, dry bool) Result {
+	if t.Run != nil {
+		return t.Run(dry)
+	}
 	var matches []string
 	for _, pattern := range t.Patterns {
 		if pattern != "" {

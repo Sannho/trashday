@@ -36,6 +36,7 @@
     "store-apps": { "name": "Cache des applications du Store", "desc": "Cache web et temp des applis du Store" },
     "thumbnails": { "name": "Cache miniatures", "desc": "Aperçus d'images, recréés à l'affichage" },
     "internet-files": { "name": "Fichiers Internet temporaires", "desc": "Cache WinINet, pièces jointes Outlook gardées" },
+    "recycle-bin": { "name": "Corbeille", "desc": "Fichiers supprimés, effacés pour de bon" },
     "firefox": { "name": "Firefox" },
     "opera": { "name": "Opera / Opera GX" },
     "chrome": { "name": "Chrome" },

@@ -36,6 +36,7 @@
     "store-apps": { "name": "Store apps cache", "desc": "Web cache and temp of Store apps" },
     "thumbnails": { "name": "Thumbnail cache", "desc": "Image previews, rebuilt when shown" },
     "internet-files": { "name": "Temporary Internet files", "desc": "WinINet cache, Outlook attachments kept" },
+    "recycle-bin": { "name": "Recycle Bin", "desc": "Deleted files, gone for good" },
     "firefox": { "name": "Firefox" },
     "opera": { "name": "Opera / Opera GX" },
     "chrome": { "name": "Chrome" },

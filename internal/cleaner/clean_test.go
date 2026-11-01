@@ -62,6 +62,13 @@ func TestCleanCountsOverlapsOnce(t *testing.T) {
 	}
 }
 
+// Analyze only queries the bin: nothing is deleted.
+func TestRecycleBinDryRun(t *testing.T) {
+	if res := Clean(Target{Run: recycleBin}, true); res.Failed != 0 || res.Freed < 0 {
+		t.Fatalf("got %+v", res)
+	}
+}
+
 func TestEnvPathRejectsUnsafeValues(t *testing.T) {
 	for _, v := range []string{"", `C:\`, `D:`, `relative\dir`, `C:\Users\a[b]c`, `C:\Users\*`} {
 		t.Setenv("TRASHDAY_TEST_VAR", v)

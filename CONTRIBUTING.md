@@ -7,7 +7,7 @@ Thanks for helping! TrashDay has one promise: **clean up the PC safely**. Every 
 A target may only contain data that its owner rebuilds by itself, with no loss for the user:
 
 - ✅ caches, temp files, crash dumps, logs, thumbnails
-- ❌ history, cookies, sessions, settings, the Recycle Bin, downloads, documents
+- ❌ history, cookies, sessions, settings, downloads, documents (the Recycle Bin item is the one exception: off by default, never in Quick clean)
 - ❌ anything that needs a service stopped, breaks offline use, or can't be undone (DISM, `Windows.old`, `Installer`, restore points)
 - ❌ registry "cleaning"
 

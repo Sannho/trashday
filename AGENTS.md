@@ -31,7 +31,7 @@ go vet ./...
 ## Hard rules
 
 - **Never run `trashday.exe` or call `cleaner.Clean(..., false)` on real paths.** It deletes files. Use `dry = true`, or tests on `t.TempDir()`.
-- **Safety first.** Only add targets that the owning app or Windows rebuilds with no user loss. No history, cookies, sessions, settings, Recycle Bin, or anything that needs a service stopped. If unsure, don't add it, and say so.
+- **Safety first.** Only add targets that the owning app or Windows rebuilds with no user loss. No history, cookies, sessions, settings, or anything that needs a service stopped. The Recycle Bin is the one deliberate exception (user request): never `Quick`, never checked by default. If unsure, don't add it, and say so.
 - Build every path with `envPath` / `drivePath`. Never use `os.Getenv` directly in a pattern.
 - Don't make `cleanPath` follow or remove symlinks or junctions, and don't make it delete a matched root.
 - Every target `ID` and `Group` needs an entry in **every** `ui/i18n/*.json`: a `name` and an optional `desc` of at most 48 characters. `TestTranslations` enforces this.

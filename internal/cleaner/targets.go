@@ -12,7 +12,8 @@ type Target struct {
 	ID       string // stable key: translations and the saved selection use it
 	Group    string
 	Patterns []string
-	Quick    bool // part of "Quick clean"
+	Quick    bool                  // part of "Quick clean"
+	Run      func(dry bool) Result // used instead of Patterns when set
 }
 
 // envPath joins an environment variable with sub-paths. It returns "" (target skipped)
@@ -98,6 +99,8 @@ func Targets() []Target {
 		// Content.Outlook inside INetCache is never touched (see keepNames in clean.go).
 		{ID: "internet-files", Group: "windows", Quick: true,
 			Patterns: []string{envPath("LOCALAPPDATA", `Microsoft\Windows\INetCache`)}},
+		// The one target with user loss: files already deleted by the user. Never Quick.
+		{ID: "recycle-bin", Group: "windows", Run: recycleBin},
 
 		{ID: "firefox", Group: "browsers", Patterns: []string{
 			envPath("LOCALAPPDATA", `Mozilla\Firefox\Profiles\*\cache2`),
