@@ -4,6 +4,8 @@ All notable changes are listed here. Versions follow [Semantic Versioning](https
 
 ## [Unreleased]
 
+## [1.1.0] - 2026-11-01
+
 ### Added
 - **Recycle Bin** item: empties the bin of every drive. Unchecked by default and never part of Quick clean.
 
@@ -26,5 +28,6 @@ First release.
 - Safety: validated paths, no symlink or junction following, Outlook attachments kept, files in use skipped.
 - Light and dark themes, English and French.
 
-[Unreleased]: https://github.com/Sannho/trashday/compare/v1.0.0...HEAD
+[Unreleased]: https://github.com/Sannho/trashday/compare/v1.1.0...HEAD
+[1.1.0]: https://github.com/Sannho/trashday/compare/v1.0.0...v1.1.0
 [1.0.0]: https://github.com/Sannho/trashday/releases/tag/v1.0.0
