@@ -5,7 +5,7 @@
 <h1 align="center">TrashDay</h1>
 
 <p align="center">
-  <b>No ads. No malware. Open source.<br>Just clean up your PC, safely.</b>
+  <b>No ads. No malware. Open source. Light and fast.<br>Just clean up your PC, safely.</b>
 </p>
 
 <p align="center">
@@ -31,6 +31,8 @@
 - **No ads, no upsell, no telemetry.** TrashDay itself makes no network requests.
 - **No malware, nothing hidden.** Every line is here. Release builds are made by GitHub Actions from this code, with a SHA-256 checksum.
 - **Open source.** Read [`targets.go`](targets.go) to see every folder it can touch.
+- **Lightweight.** One ~3 MB exe. No installer, no background service, nothing left running after you close it.
+- **Fast.** It starts quickly and just deletes files: no "deep scan" theater, no registry tricks.
 
 ## Features
 
