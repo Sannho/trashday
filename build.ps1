@@ -1,8 +1,9 @@
-# Embeds the manifest (admin rights + modern controls) only for the build:
-# a rsrc.syso left in the folder would also be linked into `go test` binaries,
-# which then refuse to start without elevation.
+# Builds trashday.exe: Tailwind CSS, tests, Windows resources (manifest + icon), binary.
+# The resources (rsrc.syso) are embedded only for the build: left in place, they would
+# also be linked into `go test` binaries, which then refuse to start without elevation.
 $ErrorActionPreference = 'Stop'
 Set-Location $PSScriptRoot
+
 # Tailwind standalone CLI v4.3.3 (no Node), fetched once from the official release and checksum-verified.
 if (-not (Test-Path bin\tailwindcss.exe)) {
     New-Item -ItemType Directory bin -Force | Out-Null
@@ -12,14 +13,19 @@ if (-not (Test-Path bin\tailwindcss.exe)) {
         throw "tailwindcss.exe checksum mismatch"
     }
 }
-bin\tailwindcss.exe -i ui.input.css -o ui.css --minify
+bin\tailwindcss.exe -i ui\style.css -o ui\app.css --minify
 if ($LASTEXITCODE) { throw "tailwindcss failed" }
-go test .
+
+go test ./...
 if ($LASTEXITCODE) { throw "tests failed" }
-go run github.com/akavel/rsrc@v0.10.2 -manifest trashday.manifest -ico trashday.ico -o rsrc.syso
+
+$syso = 'cmd\trashday\rsrc.syso'
+go run github.com/akavel/rsrc@v0.10.2 -manifest build\windows\trashday.manifest -ico build\windows\trashday.ico -o $syso
+if ($LASTEXITCODE) { throw "rsrc failed" }
 try {
-    go build -ldflags="-H windowsgui -s -w" -o trashday.exe .
+    go build -ldflags="-H windowsgui -s -w" -o trashday.exe ./cmd/trashday
+    if ($LASTEXITCODE) { throw "go build failed" }
 } finally {
-    Remove-Item rsrc.syso
+    Remove-Item $syso
 }
 Write-Host "OK: trashday.exe"

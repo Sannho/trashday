@@ -1,0 +1,70 @@
+<!doctype html>
+<!-- Markup only. Styles: style.css. Behavior: app.js. Texts: i18n/*.json (filled into [data-i18n]). -->
+<html lang="en" class="h-full">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<title>TrashDay</title>
+<link rel="stylesheet" href="app.css">
+</head>
+<body>
+<header class="flex items-center gap-3 px-5 pt-5 pb-3">
+  <svg viewBox="0 0 64 64" class="size-10 shrink-0" aria-hidden="true">
+    <rect x="11" y="12" width="36" height="6" rx="1.5" fill="#2f6be0"/>
+    <rect x="23" y="7" width="12" height="7" rx="1.5" fill="none" stroke="#2f6be0" stroke-width="2.5"/>
+    <path d="M14 20h30l-3 36H17z" fill="#3d8bfd"/>
+    <path d="M22 26v24M29 26v24M36 26v24" stroke="#a8d0ff" stroke-width="2.2" stroke-linecap="round"/>
+    <path d="M52 8q1 7 8 8-7 1-8 8-1-7-8-8 7-1 8-8z" fill="#ffc82e"/>
+  </svg>
+  <div>
+    <h1 class="text-xl font-semibold">TrashDay</h1>
+    <p class="muted text-xs" data-i18n="hint"></p>
+  </div>
+</header>
+
+<main id="list" class="min-h-0 flex-1 space-y-3 overflow-y-auto px-5 pt-1 pb-3"></main>
+
+<footer class="border-t border-slate-200 bg-white px-5 pt-4 pb-5 dark:border-slate-800 dark:bg-slate-900">
+  <div class="flex items-center gap-3">
+    <label class="flex flex-1 cursor-pointer items-center gap-2">
+      <input type="checkbox" id="all" class="checkbox">
+      <span data-i18n="selectAll"></span>
+    </label>
+
+    <div class="relative flex">
+      <button id="run" class="btn-primary rounded-l-lg px-4 py-2 font-semibold" disabled></button>
+      <button id="modeBtn" class="btn-primary rounded-r-lg border-l border-blue-500 px-2" aria-haspopup="menu" aria-expanded="false" data-i18n-label="changeAction">
+        <svg viewBox="0 0 20 20" class="size-4" fill="currentColor" aria-hidden="true"><path d="M5.2 7.2a.75.75 0 0 1 1.06 0L10 10.94l3.74-3.74a.75.75 0 1 1 1.06 1.06l-4.27 4.27a.75.75 0 0 1-1.06 0L5.2 8.26a.75.75 0 0 1 0-1.06z"/></svg>
+      </button>
+      <div id="menu" class="menu" role="menu" hidden>
+        <button class="menu-item" role="menuitemradio" data-mode="clean"><span data-i18n="clean"></span><span class="menu-desc" data-i18n="cleanDesc"></span></button>
+        <button class="menu-item" role="menuitemradio" data-mode="scan"><span data-i18n="scan"></span><span class="menu-desc" data-i18n="scanDesc"></span></button>
+        <button class="menu-item" role="menuitemradio" data-mode="quick"><span data-i18n="quick"></span><span class="menu-desc" data-i18n="quickDesc"></span></button>
+      </div>
+    </div>
+  </div>
+
+  <div class="progress"><div id="bar" class="progress-bar"></div></div>
+  <div id="result" class="muted mt-2.5 min-h-5 text-[13px]" role="status"></div>
+</footer>
+
+<template id="card">
+  <section class="card">
+    <h2 class="card-title"><span></span><button class="link-button" data-i18n="all"></button></h2>
+  </section>
+</template>
+
+<template id="row">
+  <label class="row">
+    <input type="checkbox" class="checkbox">
+    <span class="min-w-0 flex-1">
+      <span class="block" data-role="name"></span>
+      <span class="row-desc" data-role="desc"></span>
+    </span>
+    <span class="status" data-role="status"></span>
+  </label>
+</template>
+
+<script src="app.js"></script>
+</body>
+</html>

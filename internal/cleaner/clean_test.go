@@ -1,9 +1,10 @@
-package main
+package cleaner
 
 import (
 	"os"
 	"os/exec"
 	"path/filepath"
+	"strings"
 	"testing"
 )
 
@@ -40,6 +41,27 @@ func TestDryRunDeletesNothing(t *testing.T) {
 	}
 }
 
+// A folder matched twice, or matched inside another match, is counted once.
+func TestCleanCountsOverlapsOnce(t *testing.T) {
+	root := t.TempDir()
+	sub := filepath.Join(root, "Shader", "GPUCache")
+	os.MkdirAll(sub, 0o755)
+	os.WriteFile(filepath.Join(root, "a.tmp"), make([]byte, 10), 0o644)
+	os.WriteFile(filepath.Join(sub, "b.tmp"), make([]byte, 5), 0o644)
+
+	tg := Target{Patterns: []string{
+		filepath.Join(root, "*", "GPUCache"), // inside root: already counted
+		root,
+		strings.ToUpper(root), // same folder, other case
+	}}
+	if res := Clean(tg, true); res.Freed != 15 {
+		t.Errorf("dry run: got %+v, want Freed=15", res)
+	}
+	if res := Clean(tg, false); res.Freed != 15 {
+		t.Errorf("clean: got %+v, want Freed=15", res)
+	}
+}
+
 func TestEnvPathRejectsUnsafeValues(t *testing.T) {
 	for _, v := range []string{"", `C:\`, `D:`, `relative\dir`, `C:\Users\a[b]c`, `C:\Users\*`} {
 		t.Setenv("TRASHDAY_TEST_VAR", v)
@@ -51,7 +73,7 @@ func TestEnvPathRejectsUnsafeValues(t *testing.T) {
 	if p := envPath("TRASHDAY_TEST_VAR", "Temp"); p != `C:\Users\me\AppData\Local\Temp` {
 		t.Errorf("got %q", p)
 	}
-	if res := cleanTarget(Target{Patterns: []string{""}}, false); res != (Result{}) {
+	if res := Clean(Target{Patterns: []string{""}}, false); res != (Result{}) {
 		t.Fatalf("got %+v, want nothing done", res)
 	}
 }
@@ -114,33 +136,5 @@ func TestCleanPathKeepsOutlookAttachments(t *testing.T) {
 	}
 	if _, err := os.Stat(filepath.Join(root, "cache.tmp")); err == nil {
 		t.Fatal("cache file not deleted")
-	}
-}
-
-// Every target is translated, keys are unique (they key the saved selection),
-// and descriptions stay short enough for one line in the 440 px window.
-func TestTargetTexts(t *testing.T) {
-	seen := map[string]bool{}
-	for _, tg := range targets() {
-		for _, s := range []tr{tg.Group, tg.Name} {
-			if s.FR == "" || s.EN == "" {
-				t.Errorf("missing translation: %+v", s)
-			}
-		}
-		if (tg.Desc.FR == "") != (tg.Desc.EN == "") {
-			t.Errorf("description in one language only: %+v", tg.Desc)
-		}
-		for _, d := range []string{tg.Desc.FR, tg.Desc.EN} {
-			if n := len([]rune(d)); n > 48 {
-				t.Errorf("description too long (%d chars): %q", n, d)
-			}
-		}
-		if seen[tg.Name.EN] {
-			t.Errorf("duplicate key %q", tg.Name.EN)
-		}
-		seen[tg.Name.EN] = true
-	}
-	if (tr{"a", "b"}).in("fr") != "a" || (tr{"a", "b"}).in("de") != "b" {
-		t.Error("tr.in should pick French for fr, English otherwise")
 	}
 }

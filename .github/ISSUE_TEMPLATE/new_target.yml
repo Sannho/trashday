@@ -1,0 +1,29 @@
+name: New target
+description: Suggest a cache or temp folder TrashDay should clean
+labels: [target]
+body:
+  - type: markdown
+    attributes:
+      value: |
+        TrashDay only cleans data that its owner rebuilds with **no loss for the user**: no history, cookies, sessions, settings or downloads. See [CONTRIBUTING.md](https://github.com/Sannho/trashday/blob/main/CONTRIBUTING.md#the-safety-rule).
+  - type: input
+    id: app
+    attributes:
+      label: App or Windows component
+      placeholder: Spotify
+    validations:
+      required: true
+  - type: input
+    id: path
+    attributes:
+      label: Folder path
+      placeholder: '%LOCALAPPDATA%\Spotify\Browser\Cache'
+    validations:
+      required: true
+  - type: textarea
+    id: why
+    attributes:
+      label: Why is it safe to delete?
+      description: What it holds, who rebuilds it, and a source if you have one.
+    validations:
+      required: true

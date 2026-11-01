@@ -1,0 +1,81 @@
+/* Tailwind source. build.ps1 compiles it to app.css, which the app inlines at startup.
+   Reusable pieces are named classes below; one-off layout stays as utilities in index.html. */
+@import "tailwindcss" source(none);
+@source "./index.html";
+@source "./app.js";
+
+@layer base {
+  html {
+    color-scheme: light dark;
+  }
+  body {
+    @apply flex h-full flex-col bg-slate-100 text-sm text-slate-800 select-none dark:bg-slate-950 dark:text-slate-100;
+    font-family: "Segoe UI Variable Text", "Segoe UI", system-ui, sans-serif;
+  }
+}
+
+@layer components {
+  /* Secondary text */
+  .muted {
+    @apply text-slate-500 dark:text-slate-400;
+  }
+
+  /* A group of targets */
+  .card {
+    @apply overflow-hidden rounded-xl border border-slate-200 bg-white dark:border-slate-800 dark:bg-slate-900;
+  }
+  .card-title {
+    @apply flex items-center justify-between px-3.5 pt-2.5 pb-1.5 text-xs font-semibold tracking-wide text-slate-500 uppercase dark:text-slate-400;
+  }
+  .link-button {
+    @apply cursor-pointer rounded font-medium tracking-normal text-blue-600 normal-case hover:underline focus-visible:outline-2 focus-visible:outline-blue-600 dark:text-blue-400;
+  }
+
+  /* One target: checkbox, name + description, status */
+  .row {
+    @apply flex cursor-pointer items-center gap-2.5 border-t border-slate-100 px-3.5 py-2 first-of-type:border-t-0 hover:bg-blue-50 dark:border-slate-800 dark:hover:bg-blue-500/10;
+  }
+  .checkbox {
+    @apply size-4 shrink-0 cursor-pointer accent-blue-600 disabled:cursor-default;
+  }
+  .row-desc {
+    @apply block truncate text-xs text-slate-500 dark:text-slate-400;
+  }
+  .status {
+    @apply shrink-0 text-xs text-slate-500 tabular-nums dark:text-slate-400;
+  }
+  .status-ok {
+    @apply text-emerald-600 dark:text-emerald-400;
+  }
+  .status-warn {
+    @apply text-amber-600 dark:text-amber-400;
+  }
+  .spinner {
+    @apply inline-block size-3.5 animate-spin rounded-full border-2 border-slate-200 border-t-blue-600 align-middle dark:border-slate-700 dark:border-t-blue-400;
+  }
+
+  /* Split button: main action + arrow that opens the action menu */
+  .btn-primary {
+    @apply cursor-pointer bg-blue-600 text-white transition hover:bg-blue-700 focus-visible:outline-2 focus-visible:outline-offset-2 focus-visible:outline-blue-600 disabled:cursor-default disabled:opacity-50 disabled:hover:bg-blue-600;
+  }
+  .menu {
+    @apply absolute right-0 bottom-full mb-2 w-64 overflow-hidden rounded-xl border border-slate-200 bg-white py-1 shadow-lg dark:border-slate-700 dark:bg-slate-800;
+  }
+  .menu-item {
+    @apply block w-full cursor-pointer px-3.5 py-2 text-left hover:bg-blue-50 focus-visible:bg-blue-50 focus-visible:outline-none aria-checked:font-semibold aria-checked:text-blue-600 dark:hover:bg-blue-500/10 dark:focus-visible:bg-blue-500/10 dark:aria-checked:text-blue-400;
+  }
+  .menu-desc {
+    @apply block text-xs font-normal text-slate-500 dark:text-slate-400;
+  }
+
+  /* Progress bar and result line */
+  .progress {
+    @apply mt-4 h-1 overflow-hidden rounded-full bg-slate-200 dark:bg-slate-800;
+  }
+  .progress-bar {
+    @apply h-full w-0 bg-blue-600 transition-all duration-200;
+  }
+  .result-total {
+    @apply font-semibold text-emerald-600 dark:text-emerald-400;
+  }
+}

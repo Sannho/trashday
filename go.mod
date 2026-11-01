@@ -1,4 +1,4 @@
-module trashday
+module github.com/Sannho/trashday
 
 go 1.26.0
 

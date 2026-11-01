@@ -4,35 +4,39 @@ Guidance for AI coding agents working on this repository.
 
 ## Project
 
-TrashDay is a Windows-only disk cleaner: one Go binary with a WebView2 UI ([go-webview2](https://github.com/jchv/go-webview2)) and Tailwind CSS.
+TrashDay is a Windows-only disk cleaner: one Go binary (module `github.com/Sannho/trashday`) with a WebView2 UI ([go-webview2](https://github.com/jchv/go-webview2)) styled with Tailwind CSS.
 
-| File | Role |
+| Path | Role |
 |---|---|
-| `targets.go` | All cleanable targets: glob paths and English/French texts. `envPath` / `drivePath` validate env vars |
-| `clean.go` | `cleanTarget` / `cleanPath`: empty folders, keep roots, skip reparse points and `Content.Outlook`. `dry` = Analyze |
-| `main.go` | Window, JS bindings (`goTargets`, `goClean`), cleaning in a goroutine, results via `Dispatch` |
-| `index.html` | Entire UI and its i18n strings (`T.fr` / `T.en`). Tailwind classes only |
-| `ui.input.css` | Tailwind entry. `ui.css` is generated, git-ignored, and embedded at build |
-| `build.ps1` | Fetches the Tailwind CLI (checksum-pinned), builds CSS, runs tests, embeds manifest and icon, builds the exe |
-| `icon_gen.go` | `go run icon_gen.go` regenerates `trashday.ico` (build-ignored) |
+| `cmd/trashday/main.go` | Window and JS bindings: `goI18n` → `ui.Texts`, `goTargets`, `goClean` (runs `cleaner.Clean` in a goroutine, reports back with `onProgress` / `onDone` through `Dispatch`) |
+| `internal/cleaner/targets.go` | `Targets()`: every target's `ID`, `Group`, glob `Patterns`, `Quick`. `envPath` / `drivePath` validate env vars |
+| `internal/cleaner/clean.go` | `Clean(target, dry)` / `cleanPath`: empty folders, keep roots, skip reparse points and `Content.Outlook`. `dry` = Analyze |
+| `ui/ui.go` | Embeds the UI. `Page()` inlines CSS and JS into `index.html`; `Texts(locale)` loads `i18n/<lang>.json` with English fallback |
+| `ui/index.html` | Markup only. Texts come from `[data-i18n]` / `[data-i18n-label]` keys |
+| `ui/app.js` | UI behavior. `t(key, vars)` reads `ui` texts with `{placeholders}` |
+| `ui/style.css` | Tailwind source with named component classes (`.card`, `.row`, `.btn-primary`…). Compiled to `ui/app.css` (generated, git-ignored, embedded) |
+| `ui/i18n/<lang>.json` | `ui`, `groups`, `targets.<ID>.name` / `.desc`. English is the reference and the fallback |
+| `build/windows/` | `trashday.manifest` (`highestAvailable`, common controls, DPI) and `trashday.ico` |
+| `tools/icongen/` | `go run ./tools/icongen` regenerates the icon and `docs/images/icon.png` |
+| `build.ps1` | Tailwind CLI (checksum-pinned) → CSS → `go test ./...` → `rsrc.syso` → `trashday.exe` |
 
 ## Commands
 
 ```powershell
-.\build.ps1      # full build; required once before `go test` (generates ui.css)
+.\build.ps1      # full build; required once before `go test` (generates ui/app.css)
 go test ./...
 go vet ./...
 ```
 
 ## Hard rules
 
-- **Never run `trashday.exe` or call `cleanTarget(..., false)` on real paths.** It deletes files. Use `dry = true`, or tests on `t.TempDir()`.
+- **Never run `trashday.exe` or call `cleaner.Clean(..., false)` on real paths.** It deletes files. Use `dry = true`, or tests on `t.TempDir()`.
 - **Safety first.** Only add targets that the owning app or Windows rebuilds with no user loss. No history, cookies, sessions, settings, Recycle Bin, or anything that needs a service stopped. If unsure, don't add it, and say so.
 - Build every path with `envPath` / `drivePath`. Never use `os.Getenv` directly in a pattern.
 - Don't make `cleanPath` follow or remove symlinks or junctions, and don't make it delete a matched root.
-- Every target needs `Name` and `Group` in both `FR` and `EN`. An optional `Desc` must be at most 48 characters. `TestTargetTexts` enforces this.
-- The saved selection is keyed by `Name.EN`. Renaming it resets that item for users.
-- Any UI text goes in both `T.fr` and `T.en` in `index.html`.
-- Bindings run on the UI thread: long work goes in a goroutine and reports back through `call(...)`, which wraps `Dispatch`.
-- `rsrc.syso` must not stay in the tree: it makes `go test` binaries require elevation. `build.ps1` creates it and removes it.
-- Keep changes small, run `gofmt`, and add a test for new logic in `clean.go` or `targets.go`.
+- Every target `ID` and `Group` needs an entry in **every** `ui/i18n/*.json`: a `name` and an optional `desc` of at most 48 characters. `TestTranslations` enforces this.
+- The saved selection is keyed by target `ID`. Renaming an ID resets that item for users.
+- Never hard-code UI text in HTML or JS: add a key to every `ui/i18n/*.json`.
+- Styles: reuse or add a named class in `ui/style.css` instead of repeating long utility lists.
+- `rsrc.syso` must not stay in `cmd/trashday/`: it makes `go test` binaries require elevation. `build.ps1` creates it and removes it.
+- Keep changes small, run `gofmt`, add tests for new logic, and note user-visible changes in `CHANGELOG.md` under **Unreleased**.

@@ -1,6 +1,7 @@
-//go:build ignore
-
-// Generates trashday.ico (blue bin + sparkles). Run: go run icon_gen.go
+// Command icongen draws the TrashDay icon (blue bin + sparkles) and writes
+// build/windows/trashday.ico and docs/images/icon.png. Run from the repo root:
+//
+//	go run ./tools/icongen
 package main
 
 import (
@@ -128,9 +129,11 @@ func main() {
 		data.Write(p)
 		offset += len(p)
 	}
-	if err := os.WriteFile("trashday.ico", append(head.Bytes(), data.Bytes()...), 0o644); err != nil {
+	if err := os.WriteFile("build/windows/trashday.ico", append(head.Bytes(), data.Bytes()...), 0o644); err != nil {
 		panic(err)
 	}
-	// Preview of the largest size, to check the drawing.
-	os.WriteFile("icon-preview.png", render(256), 0o644)
+	// Large PNG for the README.
+	if err := os.WriteFile("docs/images/icon.png", render(256), 0o644); err != nil {
+		panic(err)
+	}
 }

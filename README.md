@@ -1,5 +1,5 @@
 <p align="center">
-  <img src="docs/icon.png" width="112" alt="TrashDay icon">
+  <img src="docs/images/icon.png" width="112" alt="TrashDay icon">
 </p>
 
 <h1 align="center">TrashDay</h1>
@@ -26,16 +26,16 @@
 </h3>
 
 <p align="center">
-  <img src="docs/screenshot-light.png" width="360" alt="TrashDay analyzing a PC, light theme">
+  <img src="docs/images/screenshot-light.png" width="360" alt="TrashDay analyzing a PC, light theme">
   &nbsp;&nbsp;
-  <img src="docs/screenshot-dark.png" width="360" alt="TrashDay action menu, dark theme">
+  <img src="docs/images/screenshot-dark.png" width="360" alt="TrashDay action menu, dark theme">
 </p>
 
 ## Why TrashDay
 
 - **No ads, no upsell, no telemetry.** TrashDay itself makes no network requests.
 - **No malware, nothing hidden.** Every line is here. Release builds are made by GitHub Actions from this code, with a SHA-256 checksum.
-- **Open source.** Read [`targets.go`](targets.go) to see every folder it can touch.
+- **Open source.** Read [`targets.go`](internal/cleaner/targets.go) to see every folder it can touch.
 - **Lightweight.** One ~3 MB exe. No installer, no background service, nothing left running after you close it.
 - **Fast.** It starts quickly and just deletes files: no "deep scan" theater, no registry tricks.
 
@@ -95,18 +95,23 @@ The script:
 4. Embeds the icon and manifest.
 5. Produces `trashday.exe`.
 
-## How it works
+## Project layout
 
-| File | Role |
-|---|---|
-| [`targets.go`](targets.go) | Every item: its paths (globs from checked env vars), texts in English and French |
-| [`clean.go`](clean.go) | Empties each matched folder but keeps the folder itself; dry-run for Analyze |
-| [`main.go`](main.go) | Opens the [go-webview2](https://github.com/jchv/go-webview2) window and runs cleaning in the background |
-| [`index.html`](index.html) | The whole UI, styled with Tailwind |
+```
+cmd/trashday/       entry point: opens the window, bridges the UI and the cleaner
+internal/cleaner/   what gets cleaned (targets.go) and how, safely (clean.go)
+ui/                 the interface: index.html, app.js, style.css (Tailwind)
+ui/i18n/            texts, one JSON file per language: add a file to add a language
+build/windows/      app manifest and icon embedded in the exe
+tools/icongen/      draws the icon: go run ./tools/icongen
+docs/images/        README images
+```
+
+The UI runs in [WebView2](https://developer.microsoft.com/microsoft-edge/webview2/) through [go-webview2](https://github.com/jchv/go-webview2). Cleaning runs in Go, in the background, and reports progress to the page.
 
 ## Contributing
 
-Ideas, new safe targets and fixes are welcome: see [CONTRIBUTING.md](CONTRIBUTING.md). AI coding agents: read [AGENTS.md](AGENTS.md) first.
+Ideas, new safe targets, translations and fixes are welcome: see [CONTRIBUTING.md](CONTRIBUTING.md). Found something deleted that shouldn't be? Follow [SECURITY.md](SECURITY.md). Changes are listed in [CHANGELOG.md](CHANGELOG.md). AI coding agents: read [AGENTS.md](AGENTS.md) first.
 
 ## License
 

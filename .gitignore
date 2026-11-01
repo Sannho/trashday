@@ -1,5 +1,10 @@
-bin/
+# Build outputs
 trashday.exe
 rsrc.syso
-ui.css
+ui/app.css
+
+# Tools fetched by build.ps1
+bin/
+
+# Editor and assistant caches
 .impeccable/

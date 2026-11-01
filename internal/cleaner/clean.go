@@ -1,10 +1,12 @@
-package main
+package cleaner
 
 import (
 	"errors"
 	"io/fs"
 	"os"
 	"path/filepath"
+	"slices"
+	"sort"
 	"strings"
 )
 
@@ -15,24 +17,40 @@ type Result struct {
 	Failed int   `json:"failed"`
 }
 
-func (r *Result) add(o Result) { r.Freed += o.Freed; r.Failed += o.Failed }
+// Add sums o into r.
+func (r *Result) Add(o Result) { r.Freed += o.Freed; r.Failed += o.Failed }
 
 // keepNames are folders never entered nor deleted, wherever they appear.
 // Content.Outlook holds opened (and possibly edited) Outlook attachments.
 var keepNames = map[string]bool{"content.outlook": true}
 
-// cleanTarget runs one target. Patterns with an empty path (rejected env var) are skipped.
+// Clean runs one target. Patterns with an empty path (rejected env var) are skipped.
 // With dry set nothing is deleted and Freed is what a real run would free (locks aside).
-func cleanTarget(t Target, dry bool) Result {
-	var res Result
+// Overlapping matches (the same folder twice, or one inside another) are handled once,
+// so Analyze never counts a file twice.
+func Clean(t Target, dry bool) Result {
+	var matches []string
 	for _, pattern := range t.Patterns {
-		if pattern == "" {
+		if pattern != "" {
+			m, _ := filepath.Glob(pattern)
+			matches = append(matches, m...)
+		}
+	}
+	keys := make(map[string]string, len(matches)) // match -> lowercase key (Windows paths ignore case)
+	for _, m := range matches {
+		keys[m] = strings.ToLower(filepath.Clean(m))
+	}
+	sort.Slice(matches, func(i, j int) bool { return keys[matches[i]] < keys[matches[j]] }) // parents first
+
+	var res Result
+	var done []string
+	for _, m := range matches {
+		k := keys[m]
+		if slices.ContainsFunc(done, func(d string) bool { return k == d || strings.HasPrefix(k, d+`\`) }) {
 			continue
 		}
-		matches, _ := filepath.Glob(pattern)
-		for _, m := range matches {
-			res.add(cleanPath(m, dry))
-		}
+		done = append(done, k)
+		res.Add(cleanPath(m, dry))
 	}
 	return res
 }
@@ -70,7 +88,7 @@ func cleanPath(path string, dry bool) Result {
 			continue
 		}
 		p := filepath.Join(path, e.Name())
-		res.add(cleanPath(p, dry))
+		res.Add(cleanPath(p, dry))
 		if e.IsDir() && !dry {
 			os.Remove(p) // fails silently if something inside was kept or locked
 		}
