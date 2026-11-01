@@ -16,9 +16,9 @@ jobs:
   build:
     runs-on: windows-latest
     steps:
-      - uses: actions/checkout@v5
+      - uses: actions/checkout@v7
 
-      - uses: actions/setup-go@v6
+      - uses: actions/setup-go@v7
         with:
           go-version-file: go.mod
 
@@ -28,7 +28,7 @@ jobs:
       - name: Checksum
         run: (Get-FileHash trashday.exe -Algorithm SHA256).Hash.ToLower() + "  trashday.exe" | Out-File -Encoding ascii trashday.exe.sha256
 
-      - uses: actions/upload-artifact@v6
+      - uses: actions/upload-artifact@v7
         with:
           name: trashday
           path: |
