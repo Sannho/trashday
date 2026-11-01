@@ -5,12 +5,17 @@
 <h1 align="center">TrashDay</h1>
 
 <p align="center">
-  <b>Take out the trash on Windows. Safely.</b><br>
-  A tiny, single-file disk cleaner that only touches caches and temp files: never your data, settings or logins.
+  <b>No ads. No malware. Open source.<br>Just clean up your PC, safely.</b>
 </p>
 
 <p align="center">
-  <img src="https://img.shields.io/badge/Windows-10%20%7C%2011-0078D4?logo=windows&logoColor=white" alt="Windows 10 | 11">
+  A tiny disk cleaner <b>for Windows only</b> that clears caches, temp files and logs, never your data, settings or logins.
+</p>
+
+<p align="center">
+  <a href="https://github.com/Sannho/trashday/releases/latest"><img src="https://img.shields.io/github/v/release/Sannho/trashday?label=download&color=2f6be0" alt="Download"></a>
+  <a href="https://github.com/Sannho/trashday/actions/workflows/build.yml"><img src="https://github.com/Sannho/trashday/actions/workflows/build.yml/badge.svg" alt="Build"></a>
+  <img src="https://img.shields.io/badge/Windows%20only-10%20%7C%2011-0078D4?logo=windows&logoColor=white" alt="Windows only: 10 | 11">
   <img src="https://img.shields.io/badge/Go-1.26-00ADD8?logo=go&logoColor=white" alt="Go 1.26">
   <img src="https://img.shields.io/badge/exe-~3%20MB-2f6be0" alt="~3 MB exe">
 </p>
@@ -20,6 +25,12 @@
   &nbsp;&nbsp;
   <img src="docs/screenshot-dark.png" width="360" alt="TrashDay action menu, dark theme">
 </p>
+
+## Why TrashDay
+
+- **No ads, no upsell, no telemetry.** TrashDay itself makes no network requests.
+- **No malware, nothing hidden.** Every line is here. Release builds are made by GitHub Actions from this code, with a SHA-256 checksum.
+- **Open source.** Read [`targets.go`](targets.go) to see every folder it can touch.
 
 ## Features
 
@@ -43,9 +54,17 @@
 - **Light & dark** theme and **English / French**, following your Windows settings.
 - **Remembers** your selection and last action.
 
+## Download
+
+Grab `trashday.exe` from the [latest release](https://github.com/Sannho/trashday/releases/latest). No installer: just run it.
+
+- **Windows 10 or 11 only.** Windows 10 may need the [WebView2 runtime](https://developer.microsoft.com/microsoft-edge/webview2/); Windows 11 already has it.
+- The exe is not code-signed, so Windows SmartScreen may warn the first time: click **More info → Run anyway**.
+- To check the download, compare its hash with `trashday.exe.sha256` from the release: `Get-FileHash trashday.exe`
+
 ## Usage
 
-[Build](#build) `trashday.exe`, run it, pick an action and press the button.
+Run `trashday.exe`, pick an action with the arrow, then press the button. Start with **Analyze** to see what can be freed.
 
 TrashDay asks for administrator rights when your account has them, so it can clean the system folders. On a standard account it cleans your own files, and system folders show as skipped.
 
@@ -75,5 +94,9 @@ The script:
 | [`clean.go`](clean.go) | Empties each matched folder but keeps the folder itself; dry-run for Analyze |
 | [`main.go`](main.go) | Opens the [go-webview2](https://github.com/jchv/go-webview2) window and runs cleaning in the background |
 | [`index.html`](index.html) | The whole UI, styled with Tailwind |
+
+## Contributing
+
+Ideas, new safe targets and fixes are welcome: see [CONTRIBUTING.md](CONTRIBUTING.md). AI coding agents: read [AGENTS.md](AGENTS.md) first.
 
 TrashDay is a modern take on the old freeware **ATF Cleaner**.
