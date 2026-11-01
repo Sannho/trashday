@@ -38,7 +38,7 @@ go test ./...    # tests only (run build.ps1 once first: it generates ui.css)
 ## Pull requests
 
 - Keep each PR small and focused, and explain why.
-- Run `gofmt`, then make sure `.\build.ps1` passes. GitHub Actions runs the same build on every PR.
+- Run `gofmt`, then make sure `.\build.ps1` passes. It is the same build that GitHub Actions runs for releases.
 - UI changes: edit [`index.html`](index.html) with Tailwind classes only. Add every new text in both languages, and include a screenshot.
 
 ## License
@@ -47,4 +47,4 @@ By contributing, you agree that your contribution is licensed under the [GPL-3.0
 
 ## Releases
 
-Maintainers push a tag such as `v1.2.0`. The [Build workflow](.github/workflows/build.yml) then publishes `trashday.exe` and its SHA-256 to a GitHub release.
+Maintainers publish a release on GitHub (Releases → Draft a new release, with a tag such as `v1.2.0`). The [Build workflow](.github/workflows/build.yml) then tests, builds and attaches `trashday.exe` and its SHA-256 to that release. You can also run the workflow by hand from the Actions tab: the exe is then kept as a run artifact.

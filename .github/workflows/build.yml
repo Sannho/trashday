@@ -1,16 +1,14 @@
 name: Build
 
-# Every push and pull request: test and build on GitHub's Windows runner.
-# Pushing a tag like v1.0.0 also publishes a GitHub release with trashday.exe.
+# Runs only when a release is published (the exe is attached to it),
+# or by hand from the Actions tab (the exe is kept as a run artifact).
 on:
-  push:
-    branches: [main]
-    tags: ["v*"]
-  pull_request:
+  release:
+    types: [published]
   workflow_dispatch:
 
 permissions:
-  contents: write # needed to create the release on tags
+  contents: write # needed to attach files to the release
 
 jobs:
   build:
@@ -35,8 +33,8 @@ jobs:
             trashday.exe
             trashday.exe.sha256
 
-      - name: Publish release
-        if: startsWith(github.ref, 'refs/tags/v')
+      - name: Attach to release
+        if: github.event_name == 'release'
         env:
           GH_TOKEN: ${{ github.token }}
-        run: gh release create "${{ github.ref_name }}" trashday.exe trashday.exe.sha256 --title "TrashDay ${{ github.ref_name }}" --generate-notes
+        run: gh release upload "${{ github.event.release.tag_name }}" trashday.exe trashday.exe.sha256 --clobber

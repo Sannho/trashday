@@ -21,6 +21,10 @@
   <img src="https://img.shields.io/badge/exe-~3%20MB-2f6be0" alt="~3 MB exe">
 </p>
 
+<h3 align="center">
+  <a href="https://github.com/Sannho/trashday/releases/latest/download/trashday.exe">⬇️ Download trashday.exe</a>
+</h3>
+
 <p align="center">
   <img src="docs/screenshot-light.png" width="360" alt="TrashDay analyzing a PC, light theme">
   &nbsp;&nbsp;
@@ -59,7 +63,7 @@
 
 ## Download
 
-Grab `trashday.exe` from the [latest release](https://github.com/Sannho/trashday/releases/latest). No installer: just run it.
+**[Download the latest `trashday.exe`](https://github.com/Sannho/trashday/releases/latest/download/trashday.exe)** (always the newest version), or browse [all releases](https://github.com/Sannho/trashday/releases). No installer: just run it.
 
 > **Only the releases of this repository are official.** TrashDay has no website and no other download source.
 
